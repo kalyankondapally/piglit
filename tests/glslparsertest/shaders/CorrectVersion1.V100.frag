@@ -5,9 +5,9 @@
 //
 // [end config]
 
-/* The program should terminate with an error message and not get into an
-   infinite loop */
-#ifdef name
+/* Only one version statement is allowed; two should raise an error. */
+#version 100
+#version 100
 
 void main()
 {
