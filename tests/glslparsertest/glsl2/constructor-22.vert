@@ -1,10 +1,14 @@
 // [config]
 // expect_result: pass
 // glsl_version: 1.20
+// glsles_version: 1.00
 //
 // [end config]
 
+#ifndef GL_ES
 #version 120
+#endif
+
 void main()
 {
    const mat3 m3 = mat3(3.00, 3.01, 3.02, 3.10, 3.11, 3.12, 3.20, 3.21, 3.22);
