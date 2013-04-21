@@ -458,6 +458,14 @@ else
     esac
 fi
 
+v=${version/./}
+if [ $v -eq 100 ]; then
+	es="-es"
+fi
+
+filepath="spec/glsl"${es}-${version}"/execution/varible-index-read"
+mkdir -p ${filepath}
+
 for mode in temp uniform varying; do
     # More than 3 is unlikely to work for the varying tests due to using too
     # many varying vectors.  mat4[3] uses 12 varying vectors by itself.
