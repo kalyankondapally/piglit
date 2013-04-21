@@ -18,6 +18,16 @@ function(piglit_make_generated_tests file_list generator_script)
 		VERBATIM)
 endfunction(piglit_make_generated_tests custom_target generator_script)
 
+function(piglit_make_sh_generated_tests file_list generator_sh_script version)
+	# Add a custom command which executes ${generator_script}
+	# during the build.
+	add_custom_command(
+		OUTPUT ${file_list}
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/${generator_sh_script} ${version} > ${file_list}
+		DEPENDS ${generator_sh_script} ${ARGN}
+		VERBATIM)
+endfunction(piglit_make_sh_generated_tests custom_target generator_sh_script)
+
 # Create custom commands and targets to build generated tests.
 piglit_make_generated_tests(
 	builtin_packing_tests.list
@@ -92,6 +102,25 @@ piglit_make_generated_tests(
 	gen_constant_array_size_tests_fp64.py
 	builtin_function_fp64.py)
 
+piglit_make_sh_generated_tests(
+	variable-index-read-100_tests.list
+	variable-index-read.sh 1.00)
+piglit_make_sh_generated_tests(
+	variable-index-read-110_tests.list
+	variable-index-read.sh 1.10)
+piglit_make_sh_generated_tests(
+	variable-index-read-120_tests.list
+	variable-index-read.sh 1.20)
+piglit_make_sh_generated_tests(
+	variable-index-write-100_tests.list
+	variable-index-write.sh 1.00)
+piglit_make_sh_generated_tests(
+	variable-index-write-110_tests.list
+	variable-index-write.sh 1.10)
+piglit_make_sh_generated_tests(
+	variable-index-write-120_tests.list
+	variable-index-write.sh 1.20)
+
 # Add a "gen-tests" target that can be used to generate all the
 # tests without doing any other compilation.
 add_custom_target(gen-tests ALL
@@ -113,4 +142,10 @@ add_custom_target(gen-tests ALL
 		uniform-initializer_tests.list
 		interpolation-qualifier-built-in-variable.list
 		builtin_uniform_tests_fp64.list
-		constant_array_size_tests_fp64.list)
+		constant_array_size_tests_fp64.list
+		variable-index-read-100_tests.list
+		variable-index-read-110_tests.list
+		variable-index-read-120_tests.list
+		variable-index-write-100_tests.list
+		variable-index-write-110_tests.list
+		variable-index-write-120_tests.list)
