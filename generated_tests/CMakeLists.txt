@@ -120,6 +120,9 @@ piglit_make_sh_generated_tests(
 piglit_make_sh_generated_tests(
 	variable-index-write-120_tests.list
 	variable-index-write.sh 1.20)
+piglit_make_sh_generated_tests(
+	outerProduct-invalid-parameters_tests.list
+	outerProduct-invalid-parameters.sh 3.00)
 
 # Add a "gen-tests" target that can be used to generate all the
 # tests without doing any other compilation.
@@ -136,6 +139,7 @@ add_custom_target(gen-tests ALL
 		cl_store_tests.list
 		interpolation_tests.list
 		non-lvalue_tests.list
+		outerProduct-invalid-parameters_tests.list
 		texture_query_lod_tests.list
 		texture_lod_tests.list
 		shader_bit_encoding_tests.list
