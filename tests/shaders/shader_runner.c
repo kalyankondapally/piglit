@@ -2114,11 +2114,11 @@ handle_texparameter(const char *line)
 		line += strlen("lod_bias ");
 		glTexParameterf(target, GL_TEXTURE_LOD_BIAS,
 				strtod(line, NULL));
-		return;
 #else
 		printf("lod_bias feature is only available in desktop GL\n");
 		piglit_report_result(PIGLIT_SKIP);
 #endif
+		return;
 	} else if (string_match("max_level ", line)) {
 		line += strlen("max_level ");
 		glTexParameteri(target, GL_TEXTURE_MAX_LEVEL,
@@ -2137,6 +2137,7 @@ handle_texparameter(const char *line)
 	} else {
 		fprintf(stderr, "unknown texture parameter in `%s'\n", line);
 		piglit_report_result(PIGLIT_FAIL);
+		return;
 	}
 
 	value = lookup_enum_string(strings, &line, parameter_name);
