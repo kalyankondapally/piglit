@@ -6,6 +6,8 @@
 // [end config]
 
 /* FAIL */
+#if defined GL_ARB_texture_rectangle
 #extension GL_ARB_texture_rectangle: disable
+#endif
 
 uniform sampler2DRect s;
