@@ -1,5 +1,0 @@
-!!ARBfp1.0
-	TEMP	R0;
-
-	SWZ	R0, fragment.color, x, y, z, w;
-	END

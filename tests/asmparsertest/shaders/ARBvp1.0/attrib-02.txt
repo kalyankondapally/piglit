@@ -1,5 +1,0 @@
-!!ARBvp1.0
-# FAIL
-# Attribute out of range
-	ATTRIB	a = vertex.attrib[537];
-	END

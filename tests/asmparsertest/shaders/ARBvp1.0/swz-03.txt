@@ -1,5 +1,0 @@
-!!ARBvp1.0
-	TEMP	R0;
-
-	SWZ	R0, vertex.color, x, y, z, w;
-	END

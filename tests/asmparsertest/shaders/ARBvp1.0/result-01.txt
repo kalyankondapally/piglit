@@ -1,5 +1,0 @@
-!!ARBvp1.0
-# FAIL
-	TEMP	R0;
-	MOV	result.depth, R0.x;
-	END

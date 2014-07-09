@@ -1,3 +1,0 @@
-!!ARBfp1.0
-	SWZ	result.color, fragment.color, a, b, g, r;
-	END

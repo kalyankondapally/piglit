@@ -11,17 +11,18 @@ set_source_files_properties(
 	PROPERTIES GENERATED 1
 	)
 
-set(UTIL_INCLUDES
-	${CMAKE_CURRENT_BINARY_DIR}
-	${CMAKE_CURRENT_SOURCE_DIR}
-	)
-
-set(UTIL_SOURCES
+piglit_add_library(piglitutil
 	piglit-log.c
 	piglit-util.c
 	)
 
-set(UTIL_GL_INCLUDES
+if(UNIX)
+	target_link_libraries(piglitutil m)
+endif(UNIX)
+
+include_directories(
+	${CMAKE_CURRENT_BINARY_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}
 	${UTIL_INCLUDES}
 	${GLEXT_INCLUDE_DIR}
 	${OPENGL_INCLUDE_PATH}
@@ -107,4 +108,14 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	endif()
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
-piglit_include_target_api()
+include_directories(
+	${UTIL_GL_INCLUDES}
+	)
+
+link_libraries(
+	${UTIL_GL_LIBS}
+	)
+
+piglit_add_library (piglitutil_gl
+	${UTIL_GL_SOURCES}
+)

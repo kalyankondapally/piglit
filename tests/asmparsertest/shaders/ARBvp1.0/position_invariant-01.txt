@@ -1,3 +1,0 @@
-!!ARBvp1.0
-	OPTION	ARB_position_invariant;
-	END

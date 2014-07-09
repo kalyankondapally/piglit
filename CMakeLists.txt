@@ -398,9 +398,13 @@ configure_file(
 include(cmake/piglit_util.cmake)
 include(cmake/piglit_dispatch.cmake)
 
+# XXX(chadv): Big HACK
+add_definitions(
+	-DPIGLIT_USE_OPENGL_ES2
+	)
+
 include_directories(src)
-add_subdirectory(cmake/target_api)
-add_subdirectory(generated_tests)
+add_subdirectory(tests)
 
 
 ##############################################################################

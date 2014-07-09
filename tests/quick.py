@@ -6,9 +6,3 @@ from tests.all import profile
 __all__ = ['profile']
 
 GleanTest.globalParams += ["--quick"]
-
-# These take too long
-del profile.tests['shaders']['glsl-fs-inline-explosion']
-del profile.tests['shaders']['glsl-fs-unroll-explosion']
-del profile.tests['shaders']['glsl-vs-inline-explosion']
-del profile.tests['shaders']['glsl-vs-unroll-explosion']

@@ -1,8 +1,0 @@
-!!ARBfp1.0
-# FAIL
-
-SHORT	TEMP	R0;
-
-	MOV	R0, fragment.texcoord[0];
-	MOV	result.color, R0;
-	END

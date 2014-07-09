@@ -1,5 +1,0 @@
-!!ARBvp1.0
-	TEMP	R0;
-	ALIAS	R0p = R0;
-
-	END

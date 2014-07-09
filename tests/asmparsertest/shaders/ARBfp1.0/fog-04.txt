@@ -1,5 +1,0 @@
-!!ARBfp1.0
-# FAIL
-	OPTION	ARB_fog_exp;
-	OPTION	ARB_fog_exp2;
-	END

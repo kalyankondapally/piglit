@@ -1,6 +1,0 @@
-!!ARBvp1.0
-# FAIL
-# Array / non-array mismatch
-
-	PARAM	aa = state.matrix.mvp;
-	END

@@ -1,5 +1,0 @@
-!!ARBvp1.0
-# FAIL
-	TEMP	R0;
-	MOV	R0, e+2
-	END
