@@ -1023,7 +1023,7 @@ spec['!OpenGL 4.4/gl-max-vertex-attrib-stride'] = PiglitGLTest('gl-4.4-max_verte
 spec['glsl-es-1.00'] = {}
 import_glsl_parser_tests(spec['glsl-es-1.00'],
                          os.path.join(testsDir, 'spec', 'glsl-es-1.00'),
-                         ['compiler'])
+                         ['compiler'], is_es=True)
 spec['glsl-es-1.00']['execution'] = {}
 add_shader_test_dir(spec['glsl-es-1.00']['execution'],
                     os.path.join(testsDir, 'spec', 'glsl-es-1.00', 'execution'),

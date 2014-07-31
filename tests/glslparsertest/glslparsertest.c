@@ -93,7 +93,7 @@ get_shader_compile_status(GLuint shader)
 	} else {
 		glGetObjectParameterivARB(shader, GL_OBJECT_COMPILE_STATUS_ARB, &status);
 	}
-#elif defined PIGLIT_USE_OPENGL_ES2
+#elif defined PIGLIT_USE_OPENGL_ES2 || defined PIGLIT_USE_OPENGL_ES3
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 #else
 #	error
@@ -113,7 +113,7 @@ get_shader_info_log_length(GLuint shader)
 	} else {
 		glGetObjectParameterivARB(shader, GL_OBJECT_INFO_LOG_LENGTH_ARB, &length);
 	}
-#elif defined PIGLIT_USE_OPENGL_ES2
+#elif defined PIGLIT_USE_OPENGL_ES2 || defined PIGLIT_USE_OPENGL_ES3
 	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
 #else
 #	error

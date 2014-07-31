@@ -19,7 +19,7 @@
 # OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-""" This module enables the running of GLSL parser tests. """
+""" This module enables the running of GLSL and GLSL ES parser tests. """
 
 from __future__ import print_function
 import os
@@ -36,17 +36,18 @@ __all__ = [
 ]
 
 
-def add_glsl_parser_test(group, filepath, test_name):
+def add_glsl_parser_test(group, filepath, test_name, is_es=False):
     """Add an instance of GLSLParserTest to the given group."""
-    group[test_name] = GLSLParserTest(filepath)
+    group[test_name] = GLSLParserTest(filepath, is_es)
 
-
-def import_glsl_parser_tests(group, basepath, subdirectories):
+def import_glsl_parser_tests(group, basepath, subdirectories, is_es=False):
     """
     Recursively register each shader source file in the given
     ``subdirectories`` as a GLSLParserTest .
 
     :subdirectories: A list of subdirectories under the basepath.
+
+    :is_es: True to check the shaders using OpenGL ES
 
     The name with which each test is registered into the given group is
     the shader source file's path relative to ``basepath``. For example,
@@ -70,7 +71,7 @@ def import_glsl_parser_tests(group, basepath, subdirectories):
                     if os.path.sep != '/':
                         testname = testname.replace(os.path.sep, '/', -1)
                     assert isinstance(testname, basestring)
-                    add_glsl_parser_test(group, filepath, testname)
+                    add_glsl_parser_test(group, filepath, testname, is_es)
 
 
 class GLSLParserTest(PiglitBaseTest):
@@ -85,11 +86,23 @@ class GLSLParserTest(PiglitBaseTest):
     filepath -- the path to a glsl_parser_test which must end in .vert,
                 .tesc, .tese, .geom or .frag
 
+    :: For GL ES, the config block can specify a specific GLSL ES version, and
+       GLSL ES expect_result.  If none are provided, the glsl_version and
+       expect_result are used.
+            /* [config]
+             * glsl_version: 1.10
+             * glsles_version: 1.00
+             * expect_result: pass
+             * glsles_expect_result: fail
+             * [end config]
+             */
+
     """
     _CONFIG_KEYS = frozenset(['expect_result', 'glsl_version',
+                              'glsles_expect_result', 'glsles_version',
                               'require_extensions', 'check_link'])
 
-    def __init__(self, filepath):
+    def __init__(self, filepath, is_es=False):
         os.stat(filepath)
 
         # a set that stores a list of keys that have been found already
@@ -104,10 +117,10 @@ class GLSLParserTest(PiglitBaseTest):
                 print(e.message, file=sys.stderr)
                 sys.exit(1)
 
-        command = self.__get_command(config, filepath)
+        command = self.__get_command(config, filepath, is_es)
         super(GLSLParserTest, self).__init__(command, run_concurrent=True)
 
-    def __get_command(self, config, filepath):
+    def __get_command(self, config, filepath, is_es):
         """ Create the command argument to pass to super()
 
         This private helper creates a configparser object, then reads in the
@@ -117,18 +130,41 @@ class GLSLParserTest(PiglitBaseTest):
         super()
 
         """
-        for opt in ['expect_result', 'glsl_version']:
-            if not config.get(opt):
-                raise GLSLParserException("Missing required section {} "
-                                          "from config".format(opt))
+        if not is_es:
+            for opt in ['expect_result', 'glsl_version']:
+                if not config.get(opt):
+                    raise GLSLParserException("Missing required section {} "
+                                              "from config".format(opt))
+
+            glsl_version = config.get('glsl_version')
+            expect_result = config.get('expect_result')
+        else:
+            # Use the glsles_version if provided
+            glsl_version = config.get('glsles_version')
+            if not glsl_version:
+                glsl_version = config.get('glsl_version')
+            if not glsl_version:
+                raise GLSLParserException("Missing glsles_version or "
+                                          "glsl_version in config")
+
+            # Use the glsles_expect_result if provided
+            expect_result = config.get('glsles_expect_result')
+            if not expect_result:
+                expect_result = config.get('expect_result')
+            if not expect_result:
+                raise GLSLParserException("Missing glsles_expect_result or "
+                                          "expect_result in config")
+
+        # OpenGL ES parsers require a special glslparsertest executable
+        if glsl_version == '1.00':
+            runner = 'glslparsertest_gles2'
+        elif glsl_version == '3.00':
+            runner = 'glslparsertest_gles3'
+        else:
+            runner = 'glslparsertest'
 
         # Create the command and pass it into a PiglitTest()
-        command = [
-            'glslparsertest',
-            filepath,
-            config['expect_result'],
-            config['glsl_version']
-        ]
+        command = [runner, filepath, expect_result, glsl_version]
 
         if config['check_link'].lower() == 'true':
             command.append('--check-link')
