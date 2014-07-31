@@ -463,8 +463,9 @@ if [ $v -eq 100 ]; then
 	es="-es"
 fi
 
-filepath="spec/glsl"${es}-${version}"/execution/varible-index-read"
-mkdir -p ${filepath}
+targetdir="spec/glsl"${es}-${version}"/execution/varible-index-read"
+mkdir -p ${targetdir}
+cd ${targetdir}
 
 for mode in temp uniform varying; do
     # More than 3 is unlikely to work for the varying tests due to using too
