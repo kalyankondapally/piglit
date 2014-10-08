@@ -18,3 +18,5 @@ void f(out float y) {
 void g() {
     f(x);
 }
+
+void main() { }

@@ -15,3 +15,5 @@ float f() {
 	x = 0.0;
 	return x;
 }
+
+void main() { }

@@ -11,6 +11,6 @@ precision mediump float;
 
 varying float x;
 
-void g() {
+void main() {
     x = 0.0;
 }

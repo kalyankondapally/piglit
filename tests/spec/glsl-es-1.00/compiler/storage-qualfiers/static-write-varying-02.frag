@@ -15,6 +15,6 @@ void f(out float y) {
     y = 0.0;
 }
 
-void g() {
+void main() {
     f(x);
 }
