@@ -10,6 +10,6 @@
 
 #version 100
 
-void f() {
+void main() {
 	lowp int x = lowp 1;
 }

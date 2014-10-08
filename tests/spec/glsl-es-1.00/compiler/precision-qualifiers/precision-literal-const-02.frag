@@ -10,6 +10,6 @@
 
 #version 100
 
-void f() {
+void main() {
 	lowp float x = lowp 0.0;
 }

@@ -19,7 +19,7 @@
 
 uniform bool b;
 
-void f()
+void main()
 {
 	precision lowp float;
 	if (b) {

@@ -12,3 +12,5 @@
 #version 100
 
 void f(lowp int x) { }
+
+void main() { }

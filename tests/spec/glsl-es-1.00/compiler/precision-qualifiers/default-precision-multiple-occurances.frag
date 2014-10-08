@@ -21,3 +21,5 @@ float f()
 
 precision lowp float;
 float y;
+
+void main() { }

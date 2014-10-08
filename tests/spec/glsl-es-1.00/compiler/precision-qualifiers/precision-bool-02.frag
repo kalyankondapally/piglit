@@ -11,6 +11,6 @@
 
 #version 130
 
-void f() {
+void main() {
 	lowp bvec2 v;
 }

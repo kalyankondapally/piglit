@@ -16,4 +16,4 @@
 
 precision mediump int;
 
-void f() { }
+void main() { }

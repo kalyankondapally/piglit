@@ -13,4 +13,4 @@
 
 highp float x;
 
-void f() { }
+void main() { }

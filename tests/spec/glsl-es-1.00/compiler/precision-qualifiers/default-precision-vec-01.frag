@@ -18,4 +18,4 @@
 
 precision mediump vec2;
 
-void f() { }
+void main() { }

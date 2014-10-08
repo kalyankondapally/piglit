@@ -17,4 +17,4 @@
 
 precision lowp bool;
 
-void f() { }
+void main() { }

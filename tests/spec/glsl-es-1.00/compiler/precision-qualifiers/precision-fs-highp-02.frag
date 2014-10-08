@@ -21,4 +21,4 @@ highp float x;
 #error
 #endif
 
-void f() { }
+void main() { }

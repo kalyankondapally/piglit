@@ -19,4 +19,4 @@
 highp float x;
 #endif
 
-void f() { }
+void main() { }

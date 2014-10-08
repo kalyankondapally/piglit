@@ -18,3 +18,5 @@ f() {
     x %= 4;
     return x;
 }
+
+void main() { }

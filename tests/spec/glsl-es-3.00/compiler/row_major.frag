@@ -12,3 +12,5 @@ int f()
 	int row_major;
 	return 0;
 }
+
+void main() { }

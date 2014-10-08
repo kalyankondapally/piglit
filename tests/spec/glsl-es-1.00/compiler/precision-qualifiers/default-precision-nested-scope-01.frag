@@ -22,7 +22,7 @@
 
 precision mediump float;
 
-void f()
+void main()
 {
 	float x;
 }

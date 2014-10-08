@@ -15,3 +15,5 @@ f() {
     int tea_time = 15 % 24;
     return tea_time;
 }
+
+void main() { }

@@ -13,4 +13,4 @@
 
 lowp int a[4];
 
-void f() { }
+void main() { }

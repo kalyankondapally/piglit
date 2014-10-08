@@ -13,4 +13,4 @@
 
 lowp float a[4];
 
-void f() { }
+void main() { }

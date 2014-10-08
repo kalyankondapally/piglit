@@ -22,7 +22,7 @@
 
 uniform bool b;
 
-void f()
+void main()
 {
 	if (b) {
 		precision mediump float;

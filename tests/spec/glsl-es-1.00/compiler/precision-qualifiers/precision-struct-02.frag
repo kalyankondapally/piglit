@@ -16,4 +16,4 @@ lowp struct s {
 	float a;
 };
 
-void f() { }
+void main() { }

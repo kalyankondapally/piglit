@@ -20,7 +20,7 @@
 
 #version 100
 
-void f()
+void main()
 {
 	precision mediump float;
 	float x;

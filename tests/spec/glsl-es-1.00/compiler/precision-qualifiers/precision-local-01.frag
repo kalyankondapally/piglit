@@ -11,6 +11,6 @@
 
 #version 100
 
-void f() {
+void main() {
 	lowp float x = 0.0;
 }

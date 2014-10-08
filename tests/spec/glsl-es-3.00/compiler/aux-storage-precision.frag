@@ -5,3 +5,5 @@
 
 #version 300 es
 centroid in mediump vec2 foo;
+
+void main() { }

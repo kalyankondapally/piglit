@@ -16,4 +16,4 @@
 
 precision lowp float;
 
-void f() { }
+void main() { }

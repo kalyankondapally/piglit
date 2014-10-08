@@ -17,3 +17,5 @@ void f(float x[2])
   float y[2];
   y = x;
 }
+
+void main() { }
