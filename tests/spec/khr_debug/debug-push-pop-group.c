@@ -268,8 +268,8 @@ static bool test_push_pop_debug_group()
 				     lengths,
 				     messageLog);
 
-	if (count != 4) {
-		fprintf(stderr, "The message log should contain 4 messages not %i messages\n", count);
+	if (count != 3) {
+		fprintf(stderr, "The message log should contain 3 messages not %i messages\n", count);
 		nextMessage = 0;
 		for (i = 0; i < count; i++) {
 			fprintf(stderr, "%s\n", messageLog+nextMessage);
@@ -279,14 +279,14 @@ static bool test_push_pop_debug_group()
 	}
 
 	if (pass) {
-		/* the third message should contain TestMessage2 from PopDebugGroup() */
-		nextMessage = lengths[0] + lengths[1];
+		/* the second message should contain TestMessage2 from PopDebugGroup() */
+		nextMessage = lengths[0];
 		if (strstr(messageLog+nextMessage, TestMessage2) == NULL) {
 			fprintf(stderr, "Expected: %s Message: %s\n", TestMessage2, messageLog+nextMessage);
 			pass = false;
 		}
 
-		/* double check that TestMessage3 didnt sneak into the log */
+		/* double check that TestMessage3 didn't sneak into the log */
 		nextMessage = 0;
 		for (i = 0; i < count; i++) {
 			if (strstr(messageLog+nextMessage, TestMessage3) != NULL) {
@@ -297,8 +297,8 @@ static bool test_push_pop_debug_group()
 			nextMessage += lengths[i];
 		}
 
-		/* the forth message should contain TestMessage4 */
-		nextMessage = lengths[0] + lengths[1] + lengths[2];
+		/* the third message should contain TestMessage4 */
+		nextMessage = lengths[0] + lengths[1];
 		if (strstr(messageLog+nextMessage, TestMessage4) == NULL) {
 			fprintf(stderr, "Expected: %s Message: %s\n", TestMessage4, messageLog+nextMessage);
 			pass = false;
