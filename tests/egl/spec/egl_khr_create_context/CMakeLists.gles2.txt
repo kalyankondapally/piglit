@@ -1,6 +1,7 @@
 link_libraries (
 	piglitutil_${piglit_target_api}
 	${EGL_LDFLAGS}
+	-ldl
 )
 
 # Tests that use ES 1.

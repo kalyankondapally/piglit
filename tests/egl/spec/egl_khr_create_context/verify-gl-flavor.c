@@ -62,6 +62,7 @@
  *        continue to next `flavor`
  */
 #include <ctype.h>
+#include <dlfcn.h>
 #include <string.h>
 
 #include "piglit-util-gl.h"
@@ -76,8 +77,92 @@ enum gl_api {
 	API_GLES3,
 };
 
+
+/* This test doesn't use the glGetString/glGetIntegerv symbols because
+ * using piglit-dispatch introduces difficulties with this test.
+ * Instead we choose to bypass dispatch by calling dlsym directly.
+ */
 static void (*my_glGetIntegerv)(GLenum pname, GLint *params);
 static const char* (*my_glGetString)(GLenum pname);
+
+#if defined(_WIN32)
+
+void dispatch_init(piglit_dispatch_api dispatch_api) {
+	(void)dispatch_api;
+	my_glGetString = (void*) eglGetProcAddress("glGetString");
+	my_glGetIntegerv = (void*) eglGetProcAddress("glGetIntegerv");
+}
+
+#elif defined(__APPLE__)
+
+void dispatch_init(piglit_dispatch_api dispatch_api) {
+	(void)dispatch_api;
+	my_glGetString = (void*) eglGetProcAddress("glGetString");
+	my_glGetIntegerv = (void*) eglGetProcAddress("glGetIntegerv");
+}
+
+#else /* Linux */
+
+#define GLX_LIB "libGL.so.1"
+#define GLES1_LIB "libGLESv1_CM.so.1"
+#define GLES2_LIB "libGLESv2.so.2"
+
+/** dlopen() return value for libGL.so.1 */
+static void *glx_handle;
+
+/** dlopen() return value for libGLESv1_CM.so.1 */
+static void *gles1_handle;
+
+/** dlopen() return value for libGLESv2.so.2 */
+static void *gles2_handle;
+
+static void *
+do_dlsym(void **handle, const char *lib_name, const char *function_name)
+{
+	void *result;
+
+	if (!*handle)
+		*handle = dlopen(lib_name, RTLD_LAZY | RTLD_LOCAL);
+
+	if (!*handle) {
+		fprintf(stderr, "Could not open %s: %s\n", lib_name, dlerror());
+		return NULL;
+	}
+
+	result = dlsym(*handle, function_name);
+	if (!result)
+		fprintf(stderr, "%s() not found in %s: %s\n", function_name, lib_name,
+			dlerror());
+
+	return result;
+}
+
+void dispatch_init(enum gl_api api) {
+	void **handle = NULL;
+	const char *lib_name = "";
+
+	switch (api) {
+	case API_GL_COMPAT:
+	case API_GL_CORE:
+		handle = &glx_handle;
+		lib_name = GLX_LIB;
+		break;
+	case API_GLES1:
+		handle = &gles1_handle;
+		lib_name = GLES1_LIB;
+		break;
+	case API_GLES2:
+	case API_GLES3:
+		handle = &gles2_handle;
+		lib_name = GLES2_LIB;
+		break;
+	}
+
+	my_glGetString = do_dlsym(handle, lib_name, "glGetString");
+	my_glGetIntegerv = do_dlsym(handle, lib_name, "glGetIntegerv");
+}
+
+#endif
 
 static void
 fold_results(enum piglit_result *a, enum piglit_result b)
@@ -139,8 +224,6 @@ get_gl_version(void)
 static enum piglit_result
 check_flavor(int requested_version, enum gl_api requested_api)
 {
-	static bool is_dispatch_init = false;
-
 	enum piglit_result result = PIGLIT_PASS;
 	int i;
 
@@ -231,13 +314,7 @@ check_flavor(int requested_version, enum gl_api requested_api)
 		goto fail;
 	}
 
-	if (!is_dispatch_init) {
-		/* We must postpone initialization of piglit-dispatch until
-		 * a context is current.
-		 */
-		piglit_dispatch_default_init(PIGLIT_DISPATCH_GL);
-		is_dispatch_init = true;
-	}
+	dispatch_init(requested_api);
 
 	if (!eglQueryContext(egl_dpy, ctx,
 			     EGL_CONTEXT_CLIENT_TYPE, &actual_client_type)) {
@@ -475,18 +552,6 @@ int
 main(int argc, char **argv)
 {
 	enum piglit_result result = PIGLIT_SKIP;
-
-	/* This test doesn't use the glGetString symbol because using
-	 * piglit-dispatch introduces difficulties with this test. Instead we
-	 * choose to bypass it with eglGetProcAddress.
-	 *
-	 * Don't be fooled. The symbol glGetString is not the glGetString
-	 * declared in <GL/gl.h> and exposed statically from libGL. It is
-	 * instead a function pointer defined by piglit-dispatch that is
-	 * resolved by glXGetProcAddress.
-	 */
-	my_glGetString = (void*) eglGetProcAddress("glGetString");
-	my_glGetIntegerv = (void*) eglGetProcAddress("glGetIntegerv");
 
 	fold_results(&result, check_opengl());
 	fold_results(&result, check_opengl_es1());
