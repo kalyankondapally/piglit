@@ -1,5 +1,6 @@
 /* [config]
  * expect_result: pass
+ * glsles_expect_result: fail
  * glsl_version: 1.20
  * glsles_version: 1.00
  * [end config]
@@ -13,6 +14,10 @@
  *
  *     The length method cannot be called on an array that has not been
  *     explicitly sized."
+ *
+ * length() function is not supported by GLSL-ES 1.0 and this test is expected
+ * to fail. However, with GLSL-ES 3.0, this test should pass as length()
+ * function is supported in this case.
  */
 
 

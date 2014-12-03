@@ -1,5 +1,6 @@
 /* [config]
  * expect_result: pass
+ * glsles_expect_result: fail
  * glsl_version: 1.20
  * glsles_version: 1.00
  * [end config]
@@ -13,6 +14,11 @@
  *     equality                 == !=
  *     assignment               =
  *     indexing (arrays only)   []"
+ *
+ * Section 5.2 Array Subscripting (page 41 of the PDF) of the GLSL-ES 1.00 spec:
+ *
+ *     "Array elements are accessed using the array subscript operator ( [ ] ).
+ *      This is the only operator that operates on arrays."
  */
 
 

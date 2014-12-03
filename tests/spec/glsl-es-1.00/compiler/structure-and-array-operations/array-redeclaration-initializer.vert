@@ -1,5 +1,6 @@
 /* [config]
  * expect_result: pass
+ * glsles_expect_result: fail
  * glsl_version: 1.20
  * glsles_version: 1.00
  * [end config]
@@ -9,6 +10,15 @@
  *     "It is legal to declare an array without a size and then later
  *     re-declare the same name as an array of the same type and specify a
  *     size."
+ *
+ * From Section 4.19 Arrays in GLSL-ES 1.0 Spec (Page 24 of the PDF):
+ *
+ *     "Arrays declared as formal parameters in a function declaration must
+ *      specify a size."
+ *
+ * From GLSL-ES 3.0 Spec (Page 29 of the PDF):
+ *
+ *     "An array declaration which leaves the size unspecified is an error"
  */
 
 
