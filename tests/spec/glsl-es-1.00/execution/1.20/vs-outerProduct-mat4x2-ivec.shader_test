@@ -1,53 +1,39 @@
 [require]
-GLSL ES >= 1.00
-GL ES >= 2.0
-# glUniformMatrix4x2fv only exists in OpenGL 2.1 or later.
+GLSL ES >= 3.00
+GL ES >= 3.0
+# outerProduct only exists in GLSL-ES 3.0 or later.
 
 
 [vertex shader]
-attribute vec4 vertex;
+in vec4 vertex;
 mat4 proj = mat4(
 	2.0/250.0, 0.0, 0.0, -1.0,
 	0.0, 2.0/250.0, 0.0, -1.0,
 	0.0, 0.0, -1.0, 0.0,
 	0.0, 0.0, 0.0, 1.0);
-/* From page 43 (page 49 of the PDF) of the GLSL 1.20 spec:
+/* As per GLSL-ES 3.0 Spec, Section 4 (page 20 in pdf):
  *
- *     "If an exact match is found, the other signatures are ignored, and the
- *     exact match is used. Otherwise, if no exact match is found, then the
- *     implicit conversions in Section 4.1.10 "Implicit Conversions" will be
- *     applied to the calling arguments if this can make their types match a
- *     signature."
- *
- * From page 20 (page 26 of the PDF) of the GLSL 1.20 spec:
- *
- *     "In some situations, an expression and its type will be implicitly
- *     converted to a different type. The following table shows all allowed
- *     implicit conversions:
- *
- *         Type of expression    Can be implicitly converted to
- *               int                         float
- *              ivec2                         vec2
- *              ivec3                         vec3
- *              ivec4                         vec4"
+ *     "There are no implicit conversions between types."
  */
 
 uniform ivec2 c;
 uniform ivec4 r;
 uniform mat4x2 expected;
-varying vec4 color;
+out vec4 color;
 
 void main() {
   gl_Position = vertex;
-	gl_Position *= proj;
+  gl_Position *= proj;
   mat4x2 result = outerProduct(c, r);
   color = (result == expected) ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
 }
 
 [fragment shader]
+precision mediump float;
+in vec4 color;
+out vec4 frag_color;
 
-varying vec4 color;
-void main() { gl_FragColor = color; }
+void main() { frag_color = color; }
 
 [test]
 clear color 0.5 0.5 0.5 0.0

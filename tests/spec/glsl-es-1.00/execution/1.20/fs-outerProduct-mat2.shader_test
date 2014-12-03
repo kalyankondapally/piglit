@@ -1,9 +1,10 @@
 [require]
-GLSL ES >= 1.00
-GL ES >= 2.0
+GLSL ES >= 3.00
+GL ES >= 3.0
+# outerProduct only exists in GLSL-ES 3.0 or later.
 
 [vertex shader]
-attribute vec4 vertex;
+in vec4 vertex;
 mat4 proj = mat4(
 	2.0/250.0, 0.0, 0.0, -1.0,
 	0.0, 2.0/250.0, 0.0, -1.0,
@@ -15,13 +16,15 @@ void main() { gl_Position = vertex;
 
 [fragment shader]
 
+precision mediump float;
 uniform vec2 c;
 uniform vec2 r;
 uniform mat2 expected;
+out vec4 frag_color;
 
 void main() {
   mat2 result = outerProduct(c, r);
-  gl_FragColor = (result == expected) ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+  frag_color = (result == expected) ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
 }
 
 [test]

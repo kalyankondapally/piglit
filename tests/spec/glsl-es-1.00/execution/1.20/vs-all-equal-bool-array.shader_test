@@ -12,11 +12,12 @@ mat4 proj = mat4(
 
 varying vec4 color;
 
-uniform bool[2] ub = bool[2](bool(0), bool(1));
+uniform bool ub[2];
+uniform bool result[2];
 
 void main()
 {
-  if (ub == bool[2](bool(1), bool(1))) {
+  if (ub[0] == result[0] && ub[1] == result[1]) {
     color = vec4(1, 0, 0, 1);
   } else {
     color = vec4(0, 1, 0, 1);
@@ -26,7 +27,7 @@ void main()
 }
 
 [fragment shader]
-
+precision highp float;
 varying vec4 color;
 
 void main()
@@ -35,5 +36,9 @@ void main()
 }
 
 [test]
+uniform int ub[0] 0
+uniform int ub[1] 1
+uniform int result[0] 1
+uniform int result[1] 1
 draw rect -1 -1 2 2
 probe all rgb 0 1 0

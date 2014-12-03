@@ -10,30 +10,30 @@ GL ES >= 2.0
 
 [vertex shader]
 attribute vec4 vertex;
-mat4 proj = mat4(
-	2.0/250.0, 0.0, 0.0, -1.0,
-	0.0, 2.0/250.0, 0.0, -1.0,
-	0.0, 0.0, -1.0, 0.0,
-	0.0, 0.0, 0.0, 1.0);
+varying vec4 color;
+struct s { float f; vec3 v; };
+uniform s a[1];
 
 void main(void)
 {
     float x = 3.0;
-    struct s { float f; vec3 v; };
-    s a[1]=s[](s(x,vec3(x)));
     if (a[0].f==3.0)
-      gl_FrontColor = vec4(0.0, 1.0, 0.0, 1.0); // green
+      color = vec4(0.0, 1.0, 0.0, 1.0); // green
     else
-      gl_FrontColor = vec4(1.0, 0.0, 0.0, 1.0); // red
+      color = vec4(1.0, 0.0, 0.0, 1.0); // red
     gl_Position = vertex;
 }
 
 [fragment shader]
+precision highp float;
+varying vec4 color;
 void main(void)
 {
-    gl_FragColor = gl_Color;
+    gl_FragColor = color;
 }
 
 [test]
+uniform float a[0].f 3.0
+uniform vec3 a[0].v vec3(3.0)
 draw rect -1 -1 2 2
-probe all rgba 0.0 1.0 0.0 1.0
+probe all rgb 0.0 1.0 0.0 1.0
