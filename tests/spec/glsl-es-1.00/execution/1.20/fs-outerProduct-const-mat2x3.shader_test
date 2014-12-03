@@ -1,7 +1,5 @@
 [require]
-GLSL ES >= 1.00
-GL ES >= 2.0
-# glUniformMatrix2x3fv only exists in OpenGL 2.1 or later.
+GLSL >= 1.20
 
 [vertex shader]
 attribute vec4 vertex;

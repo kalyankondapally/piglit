@@ -1,6 +1,5 @@
 [require]
-GLSL ES >= 1.00
-GL ES >= 2.0
+GLSL >= 1.20
 # glUniformMatrix2x3fv only exists in OpenGL 2.1 or later.
 
 
@@ -10,7 +9,7 @@ mat4 proj = mat4(
 	2.0/250.0, 0.0, 0.0, -1.0,
 	0.0, 2.0/250.0, 0.0, -1.0,
 	0.0, 0.0, -1.0, 0.0,
-	0.0, 0.0, 0.0, 1.0);
+        0.0, 0.0, 0.0, 1.0);
 /* From page 43 (page 49 of the PDF) of the GLSL 1.20 spec:
  *
  *     "If an exact match is found, the other signatures are ignored, and the
@@ -40,7 +39,7 @@ varying vec4 color;
 
 void main() {
   gl_Position = vertex;
-	gl_Position *= proj;
+        gl_Position *= proj;
   mat2x3 result = outerProduct(c, r);
   color = (result == expected) ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
 }
