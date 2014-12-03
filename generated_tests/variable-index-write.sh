@@ -414,6 +414,11 @@ function emit_vs_wr_test
         emit_distanceSqr_function $matrix_dim
     fi
 
+    #  Add checks for GLSLES-300.
+    if [ "$v" -eq 100 ]; then
+        echo "// GLSL-ES doesn't support GL_FrontColor."
+        echo "varying vec4 color;"
+    fi
     echo "void main()"
     echo "{"
     if [ "$v" -eq 100 ]; then
@@ -428,8 +433,13 @@ function emit_vs_wr_test
     emit_transform $*
 
     if [ "x$mode" != "xvarying" ] ; then
-	echo "    gl_FrontColor = (distanceSqr(dst_matrix${idx} * v, expect) < 4e-9)"
-	echo "        ? vec4(0.0, 1.0, 0.0, 1.0) : vec4(1.0, 0.0, 0.0, 1.0);"
+        # Add checks for GLSL-ES 300.
+        if [ "$v" -eq 100 ]; then
+            echo "    color = (distanceSqr(dst_matrix${idx} * v, expect) < 4e-9)"
+        else
+            echo "    gl_FrontColor = (distanceSqr(dst_matrix${idx} * v, expect) < 4e-9)"
+        fi
+    echo "                ? vec4(0.0, 1.0, 0.0, 1.0) : vec4(1.0, 0.0, 0.0, 1.0);"
     fi
 
     echo "}"
@@ -437,7 +447,15 @@ function emit_vs_wr_test
 
     if [ "x$mode" != "xvarying" ];then
 	echo "[fragment shader]"
-	echo "void main() { gl_FragColor = gl_Color; }"
+        # Add checks for GLSL-ES 300
+        if [ "$v" -eq 100 ]; then
+            echo "// Fragment shaders have no default precision, lets define one."
+            echo "precision mediump float;"
+            echo "varying vec4 color;"
+            echo "void main() { gl_FragColor = color; }"
+        else
+            echo "void main() { gl_FragColor = gl_Color; }"
+        fi
 	echo
     else
 	emit_fs $*
