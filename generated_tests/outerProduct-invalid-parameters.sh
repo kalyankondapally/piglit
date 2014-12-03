@@ -16,6 +16,7 @@ function emit_vs
  *
  * http://www.khronos.org/opengles/sdk/docs/manglsl/xhtml/outerProduct.xml
  */
+#version 300 es
 void main () {
   gl_Position = vec4(0);
   outerProduct(${t}(0), ${t}(0));
@@ -39,6 +40,7 @@ function emit_valid_vs
  *
  * http://www.khronos.org/opengles/sdk/docs/manglsl/xhtml/outerProduct.xml
  */
+#version 300 es
 void main () {
   gl_Position = vec4(0);
   outerProduct(${t}(0), ${t}(0));
@@ -63,6 +65,7 @@ function emit_valid_mixed_vs
  *
  * http://www.khronos.org/opengles/sdk/docs/manglsl/xhtml/outerProduct.xml
  */
+#version 300 es
 void main () {
   gl_Position = vec4(0);
   outerProduct(${t}(0), ${u}(0));
