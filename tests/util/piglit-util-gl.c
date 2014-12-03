@@ -1027,8 +1027,14 @@ piglit_probe_pixel_rgb_silent(int x, int y, const float* expected, float *out_pr
 	GLfloat probe[3];
 	int i;
 	GLboolean pass = GL_TRUE;
-
-	piglit_read_pixels_float(x, y, 1, 1, GL_RGB, probe);
+	/**
+          * With GLES3, GL_RGBA, GL_RGBA_INTEGER are valid formats for Read Pixels.
+          * We could query implementation specific pixel format using
+          * GL_IMPLEMENTATION_COLOR_READ_FORMAT, but Mesa doesn't have the needed
+          * support.
+          */
+        GLenum format = piglit_is_gles() ? GL_RGBA : GL_RGB;
+	piglit_read_pixels_float(x, y, 1, 1, format, probe);
 
 	for(i = 0; i < 3; ++i)
 		if (fabs(probe[i] - expected[i]) > piglit_tolerance[i])
@@ -1072,8 +1078,14 @@ piglit_probe_pixel_rgb(int x, int y, const float* expected)
 	GLfloat probe[3];
 	int i;
 	GLboolean pass = GL_TRUE;
-
-	piglit_read_pixels_float(x, y, 1, 1, GL_RGB, probe);
+	/**
+          * With GLES3, GL_RGBA, GL_RGBA_INTEGER are valid formats for Read Pixels.
+          * We could query implementation specific pixel format using
+          * GL_IMPLEMENTATION_COLOR_READ_FORMAT, but Mesa doesn't have the needed
+          * support.
+          */
+        GLenum format = piglit_is_gles() ? GL_RGBA : GL_RGB;
+        piglit_read_pixels_float(x, y, 1, 1, format, probe);
 
 	for(i = 0; i < 3; ++i)
 		if (fabs(probe[i] - expected[i]) > piglit_tolerance[i])
@@ -1125,12 +1137,18 @@ piglit_probe_rect_rgb_silent(int x, int y, int w, int h, const float *expected)
 	int i, j, p;
 	GLfloat *probe;
 	GLfloat *pixels;
-
-	pixels = piglit_read_pixels_float(x, y, w, h, GL_RGB, NULL);
+	/**
+          * With GLES3, GL_RGBA, GL_RGBA_INTEGER are valid formats for Read Pixels.
+          * We could query implementation specific pixel format using
+          * GL_IMPLEMENTATION_COLOR_READ_FORMAT, but Mesa doesn't have the needed
+          * support.
+          */
+        GLenum format = piglit_is_gles() ? GL_RGBA : GL_RGB;
+        pixels = piglit_read_pixels_float(x, y, 1, 1, format, probe);
 
 	for (j = 0; j < h; j++) {
 		for (i = 0; i < w; i++) {
-			probe = &pixels[(j*w+i)*3];
+			probe = &pixels[(j*w+i)*piglit_num_components(format)];
 
 			for (p = 0; p < 3; ++p) {
 				if (fabs(probe[p] - expected[p]) >= piglit_tolerance[p]) {
@@ -1183,12 +1201,18 @@ piglit_probe_rect_rgb(int x, int y, int w, int h, const float *expected)
 	int i, j, p;
 	GLfloat *probe;
 	GLfloat *pixels;
-
-	pixels = piglit_read_pixels_float(x, y, w, h, GL_RGB, NULL);
+	/**
+          * With GLES3, GL_RGBA, GL_RGBA_INTEGER are valid formats for Read Pixels.
+          * We could query implementation specific pixel format using
+          * GL_IMPLEMENTATION_COLOR_READ_FORMAT, but Mesa doesn't have the needed
+          * support.
+          */
+        GLenum format = piglit_is_gles() ? GL_RGBA : GL_RGB;
+	pixels = piglit_read_pixels_float(x, y, 1, 1, format, probe);
 
 	for (j = 0; j < h; j++) {
 		for (i = 0; i < w; i++) {
-			probe = &pixels[(j*w+i)*3];
+			probe = &pixels[(j*w+i)*piglit_num_components(format)];
 
 			for (p = 0; p < 3; ++p) {
 				if (fabs(probe[p] - expected[p]) >= piglit_tolerance[p]) {
